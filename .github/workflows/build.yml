@@ -36,5 +36,5 @@ jobs:
       - name: Upload JAR as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: spring-boot-jar
+          name: crud-api-ram-jar
           path: crud-api/target/*.jar  # Path to your generated JAR file
