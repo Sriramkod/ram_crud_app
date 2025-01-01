@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'  # Change this according to your project's requirements
+          distribution: 'adoptopenjdk'  # You can also use 'zulu' or other distributions
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3  # Updated to v3
