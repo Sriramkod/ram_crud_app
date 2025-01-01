@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'  # Use the version you need
-          distribution: 'corretto'  # Use Amazon Corretto JDK distribution
+          distribution: 'zulu'  
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3  # Updated to v3
