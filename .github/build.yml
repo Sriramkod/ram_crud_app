@@ -1,0 +1,39 @@
+name: Build Spring Boot Project
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow on push to the 'main' branch
+  pull_request:
+    branches:
+      - main  # Also trigger for pull requests to 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Change this according to your project's requirements
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn clean package --file pom.xml
+
+      - name: Upload JAR as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: spring-boot-jar
+          path: target/*.jar  # Path to your generated JAR file
