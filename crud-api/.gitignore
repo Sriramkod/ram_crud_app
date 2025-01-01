@@ -1,8 +1,10 @@
 # Ignore all files in the target folder globally
-/target/
+/target/classes 
+/target/maven-archiver 
+/target/surefire-reports 
+/target/generated-test-sources 
+/target/generated-sources
 
-# Track the JAR file in the target folder
-!target/*.jar
 
 ### STS ###
 .apt_generated
