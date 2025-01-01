@@ -33,7 +33,7 @@ jobs:
         run: mvn clean package --file pom.xml
 
       - name: Upload JAR as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: spring-boot-jar
           path: target/*.jar  # Path to your generated JAR file
