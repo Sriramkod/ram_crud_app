@@ -22,7 +22,7 @@ jobs:
           java-version: '11'  # Change this according to your project's requirements
 
       - name: Cache Maven dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3  # Updated to v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
