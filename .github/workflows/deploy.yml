@@ -2,7 +2,7 @@ name: Deploy to EC2
 
 on:
   workflow_run:
-    workflows: ["Build Spring Boot Project"]  # Name of the build workflow
+    workflows: ["Upload JAR as an artifact"]  # Name of the build workflow
     types:
       - completed
 
