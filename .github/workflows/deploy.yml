@@ -1,17 +1,21 @@
 name: Deploy to EC2
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Build JAR
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: crud-api-jar
 
     - name: Set up SSH
       run: |
@@ -20,14 +24,14 @@ jobs:
         chmod 600 ~/.ssh/ramkey
         ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
+    - name: Transfer JAR file to EC2
+      run: |
+        scp -i ~/.ssh/ramkey -o StrictHostKeyChecking=no ./crud-api-ram-jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/crud-api-ram-jar
+
     - name: Deploy to EC2
       run: |
-        ssh -i ~/.ssh/ramkey ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-        cd ~/ram_crud_app
-        git pull origin main
-        cd crud-api
-        ./mvnw clean package
-        pkill -f 'java -jar'
-        nohup java -jar crud-api/target/crud-api-ram-jar > app.log 2>&1 &
+        ssh -i ~/.ssh/ramkey -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        pkill -f 'java -jar' || true
+        nohup java -jar /home/${{ secrets.EC2_USER }}/crud-api-ram-jar > app.log 2>&1 &
         EOF
 
