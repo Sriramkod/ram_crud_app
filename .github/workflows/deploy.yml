@@ -28,6 +28,6 @@ jobs:
         cd crud-api
         ./mvnw clean package
         pkill -f 'java -jar'
-        nohup java -jar target/crud-api-ram-jar > app.log 2>&1 &
+        nohup java -jar crud-api/target/crud-api-ram-jar > app.log 2>&1 &
         EOF
 
