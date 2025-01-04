@@ -34,4 +34,3 @@ jobs:
         pkill -f 'java -jar' || true
         nohup java -jar /home/${{ secrets.EC2_USER }}/crud-api-ram-jar > app.log 2>&1 &
         EOF
-
