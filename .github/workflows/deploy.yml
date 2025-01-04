@@ -17,8 +17,8 @@ jobs:
       - name: Download JAR artifact
         uses: actions/download-artifact@v3
         with:
-          name: crud-api-ram-jar
-          path: ./  # Save the artifact to the current directory
+          name: crud-api-ram-jar  # Artifact name must match the name used in build.yml
+          path: ./  # Download artifact to the current directory
 
       - name: Set up SSH
         run: |
