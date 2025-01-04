@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: crud-api-ram-jar
-          path: crud-api/target/*.jar  # Path to your generated JAR file
+          path: crud-api/target/crud-api-latest.jar  # Path to your generated JAR file
