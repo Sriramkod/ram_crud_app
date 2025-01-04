@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   workflow_run:
     workflows:
-      - Build with Maven
+      - Build Spring Boot Project
     types:
       - completed
 
@@ -15,7 +15,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: crud-api-jar
+        name: crud-api-ram-jar  # Name of the artifact to download
 
     - name: Set up SSH
       run: |
