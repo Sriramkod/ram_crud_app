@@ -33,8 +33,8 @@ jobs:
       - name: Upload JAR as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: crud-api-ram-jar
-          path: crud-api/target/*.jar
+          name: crud-api-ram.jar
+          path: crud-api/target/crud-api-latest.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
       - name: Download JAR artifact
         uses: actions/download-artifact@v3
         with:
-          name: crud-api-ram-jar
+          name: crud-api-ram.jar
           path: ./  # Download artifact to the current directory
 
       - name: Set up SSH
@@ -61,5 +61,5 @@ jobs:
           # Kill the old running app if any
           pkill -f 'java -jar'
           # Deploy the new JAR file
-          nohup java -jar crud-api-ram-jar > app.log 2>&1 &
+          nohup java -jar crud-api-ram.jar > app.log 2>&1 &
           EOF
