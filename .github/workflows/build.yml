@@ -39,12 +39,12 @@ jobs:
 
       - name: Copy JAR to EC2
         run: |
-          scp -i ~/.ssh/ramkey crud-api/target/*.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/ram_crud_app/
+          scp -i ~/.ssh/ramkey crud-api/target/*.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/ram_crud_app/
 
       - name: Deploy on EC2
         run: |
           ssh -i ~/.ssh/ramkey -T ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /home/ubuntu/ram_crud_app
+          cd /home/ec2-user/ram_crud_app
           # Kill any previously running app
           pkill -f 'java -jar' || true
           # Start the new JAR
