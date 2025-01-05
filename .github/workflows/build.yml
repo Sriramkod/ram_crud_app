@@ -6,7 +6,7 @@ on:
       - main  # Trigger this workflow on push to the 'main' branch
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,23 +30,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean package --file crud-api/pom.xml
 
-      - name: Upload JAR as an artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: crud-api-ram.jar
-          path: crud-api/target/crud-api-latest.jar
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build  # Make sure deploy only runs after build completes
-
-    steps:
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: crud-api-ram.jar
-          path: ./  # Download artifact to the current directory
-
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
@@ -54,12 +37,16 @@ jobs:
           chmod 600 ~/.ssh/ramkey
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy to EC2
+      - name: Copy JAR to EC2
+        run: |
+          scp -i ~/.ssh/ramkey crud-api/target/*.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/ram_crud_app/
+
+      - name: Deploy on EC2
         run: |
           ssh -i ~/.ssh/ramkey -T ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ~/ram_crud_app
-          # Kill the old running app if any
-          pkill -f 'java -jar'
-          # Deploy the new JAR file
-          nohup java -jar crud-api-ram.jar > app.log 2>&1 &
+          cd /home/ubuntu/ram_crud_app
+          # Kill any previously running app
+          pkill -f 'java -jar' || true
+          # Start the new JAR
+          nohup java -jar crud-api-latest.jar > app.log 2>&1 &
           EOF
